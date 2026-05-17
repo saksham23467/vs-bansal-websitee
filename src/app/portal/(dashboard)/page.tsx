@@ -61,10 +61,13 @@ export default async function PortalDashboardPage() {
               </p>
               <div className="flex flex-wrap gap-2">
                 <Button asChild size="sm">
-                  <Link href="/admin/documents">Client documents</Link>
+                  <Link href="/portal/admin/clients">Add clients</Link>
+                </Button>
+                <Button asChild size="sm" variant="secondary">
+                  <Link href="/portal/admin/documents">Client documents</Link>
                 </Button>
                 <Button asChild size="sm" variant="outline">
-                  <Link href="/admin">Admin overview</Link>
+                  <Link href="/portal/admin">Admin overview</Link>
                 </Button>
               </div>
             </CardContent>

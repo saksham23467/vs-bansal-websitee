@@ -47,7 +47,7 @@ export default async function PortalDocumentsPage() {
             No client accounts found. Run <code className="rounded bg-amber-100 px-1">prisma/seed-users.sql</code>{" "}
             in Neon, or use{" "}
             <Button asChild variant="link" className="h-auto p-0 text-amber-900">
-              <Link href="/admin/documents">Admin document manager</Link>
+              <Link href="/portal/admin/documents">Admin document manager</Link>
             </Button>
             .
           </CardContent>
@@ -73,7 +73,7 @@ export default async function PortalDocumentsPage() {
 
       {isAdmin && (
         <Button asChild variant="outline">
-          <Link href="/admin/documents">Open admin document manager</Link>
+          <Link href="/portal/admin/documents">Open admin document manager</Link>
         </Button>
       )}
     </div>

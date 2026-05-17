@@ -24,6 +24,12 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      { source: "/admin", destination: "/portal/admin", permanent: true },
+      { source: "/admin/documents", destination: "/portal/admin/documents", permanent: true },
+    ];
+  },
   experimental: {
     serverActions: {
       bodySizeLimit: "16mb",

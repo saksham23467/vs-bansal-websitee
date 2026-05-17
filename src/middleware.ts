@@ -19,7 +19,7 @@ export default auth((req) => {
       url.searchParams.set("callbackUrl", pathname);
       return NextResponse.redirect(url);
     }
-    if (session.user.role !== "ADMIN") {
+    if (session.user.role !== "ADMIN" && session.user.role !== "STAFF") {
       return NextResponse.redirect(new URL("/portal", req.nextUrl));
     }
     return NextResponse.next();

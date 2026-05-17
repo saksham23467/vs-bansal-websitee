@@ -10,6 +10,7 @@ import {
   MessageSquare,
   ClipboardList,
   Shield,
+  UserPlus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,12 @@ const nav = [
   { href: "/portal#messages", label: "Messages", icon: MessageSquare },
 ];
 
+const adminNav = [
+  { href: "/portal/admin", label: "Overview", icon: Shield, exact: true },
+  { href: "/portal/admin/clients", label: "Clients", icon: UserPlus },
+  { href: "/portal/admin/documents", label: "Documents", icon: FileText },
+];
+
 export function PortalShell({
   children,
   signOutAction,
@@ -30,7 +37,7 @@ export function PortalShell({
 }) {
   const pathname = usePathname();
   const { data: session } = useSession();
-  const isAdmin = session?.user?.role === "ADMIN";
+  const isAdmin = session?.user?.role === "ADMIN" || session?.user?.role === "STAFF";
 
   return (
     <div className="min-h-screen bg-navy-50/80 pb-24 dark:bg-navy-950 lg:pb-8">
@@ -39,7 +46,7 @@ export function PortalShell({
           <div className="sticky top-24 space-y-3 rounded-2xl border border-navy-100 bg-white p-4 shadow-sm dark:border-navy-800 dark:bg-navy-900/60">
             <div className="border-b border-navy-100 px-2 pb-3 dark:border-navy-800">
               <p className="text-xs font-semibold uppercase tracking-wider text-navy-400">
-                Client portal
+                {isAdmin ? "Admin portal" : "Client portal"}
               </p>
               {session?.user?.email && (
                 <p className="mt-1 truncate text-sm font-medium text-navy-800 dark:text-navy-200">
@@ -68,16 +75,36 @@ export function PortalShell({
                   </Link>
                 );
               })}
-              {isAdmin && (
-                <Link
-                  href="/admin/documents"
-                  className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-royal-700 hover:bg-royal-50 dark:text-royal-400 dark:hover:bg-navy-800"
-                >
-                  <Shield className="h-4 w-4" />
-                  Admin panel
-                </Link>
-              )}
             </nav>
+            {isAdmin && (
+              <div className="border-t border-navy-100 pt-3 dark:border-navy-800">
+                <p className="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-navy-400">
+                  Admin
+                </p>
+                <nav className="flex flex-col gap-1">
+                  {adminNav.map((item) => {
+                    const active = item.exact
+                      ? pathname === item.href
+                      : pathname.startsWith(item.href);
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={cn(
+                          "flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                          active
+                            ? "bg-navy-800 text-white"
+                            : "text-navy-700 hover:bg-navy-50 dark:text-navy-200 dark:hover:bg-navy-800"
+                        )}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+                </nav>
+              </div>
+            )}
             <form action={signOutAction} className="border-t border-navy-100 pt-3 dark:border-navy-800">
               <Button type="submit" variant="outline" className="w-full justify-start gap-2" size="sm">
                 <LogOut className="h-4 w-4" />
@@ -91,28 +118,33 @@ export function PortalShell({
       </div>
 
       <nav className="fixed inset-x-0 bottom-0 z-40 flex border-t border-navy-200 bg-white/95 backdrop-blur-lg lg:hidden dark:border-navy-800 dark:bg-navy-950/95">
-        {nav.slice(0, 2).map((item) => {
-          const active = item.exact
-            ? pathname === item.href
-            : pathname.startsWith(item.href);
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex flex-1 flex-col items-center gap-1 py-3 text-xs font-medium",
-                active ? "text-royal-600" : "text-navy-500"
-              )}
-            >
-              <item.icon className="h-5 w-5" />
-              {item.label}
-            </Link>
-          );
-        })}
+        <Link
+          href="/portal"
+          className={cn(
+            "flex flex-1 flex-col items-center gap-1 py-3 text-xs font-medium",
+            pathname === "/portal" ? "text-royal-600" : "text-navy-500"
+          )}
+        >
+          <LayoutDashboard className="h-5 w-5" />
+          Home
+        </Link>
+        <Link
+          href="/portal/documents"
+          className={cn(
+            "flex flex-1 flex-col items-center gap-1 py-3 text-xs font-medium",
+            pathname.startsWith("/portal/documents") ? "text-royal-600" : "text-navy-500"
+          )}
+        >
+          <FileText className="h-5 w-5" />
+          Docs
+        </Link>
         {isAdmin && (
           <Link
-            href="/admin/documents"
-            className="flex flex-1 flex-col items-center gap-1 py-3 text-xs font-medium text-royal-600"
+            href="/portal/admin"
+            className={cn(
+              "flex flex-1 flex-col items-center gap-1 py-3 text-xs font-medium",
+              pathname.startsWith("/portal/admin") ? "text-royal-600" : "text-navy-500"
+            )}
           >
             <Shield className="h-5 w-5" />
             Admin
