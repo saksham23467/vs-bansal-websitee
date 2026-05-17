@@ -27,6 +27,7 @@ CREATE TABLE "User" (
     "role" "UserRole" NOT NULL DEFAULT 'CLIENT',
     "phone" TEXT,
     "company" TEXT,
+    "portalPassword" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

@@ -34,6 +34,7 @@ export async function GET() {
       email: true,
       phone: true,
       company: true,
+      portalPassword: true,
       createdAt: true,
       _count: { select: { documents: true } },
     },
@@ -79,6 +80,7 @@ export async function POST(req: Request) {
       role: UserRole.CLIENT,
       phone: parsed.data.phone?.trim() || null,
       company: parsed.data.company?.trim() || null,
+      portalPassword: parsed.data.password,
       emailVerified: new Date(),
     },
     select: {
@@ -87,6 +89,7 @@ export async function POST(req: Request) {
       email: true,
       phone: true,
       company: true,
+      portalPassword: true,
       createdAt: true,
     },
   });

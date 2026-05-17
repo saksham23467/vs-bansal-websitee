@@ -49,9 +49,11 @@ model User {
   passwordHash  String?
   image         String?
   role          UserRole  @default(CLIENT)
-  phone         String?
-  company       String?
-  createdAt     DateTime  @default(now())
+  phone           String?
+  company         String?
+  /// Last portal password set by admin (for desk reference only; login uses passwordHash)
+  portalPassword  String?
+  createdAt       DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
   accounts      Account[]
