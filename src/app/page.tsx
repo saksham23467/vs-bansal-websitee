@@ -26,7 +26,7 @@ export const metadata = buildMetadata({
 
 const homeFaqs = [
   {
-    question: "Who are the partners at VS Bansal & Associates?",
+    question: "Who are the partners at V S bansal & associates?",
     answer: "The firm is led by CA Sumit Bansal (GST & Income Tax) and CA Vineeta Bansal (Audit, ROC & Startup Advisory), both ICAI-registered chartered accountants.",
   },
   {

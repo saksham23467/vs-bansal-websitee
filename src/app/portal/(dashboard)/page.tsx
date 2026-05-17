@@ -7,7 +7,7 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
   title: "Client portal",
-  description: "Your VS Bansal & Associates client workspace",
+  description: "Your V S bansal & associates client workspace",
   path: "/portal",
 });
 

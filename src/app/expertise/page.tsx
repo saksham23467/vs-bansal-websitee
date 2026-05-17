@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 
 export const metadata = buildMetadata({
   title: "Our Partners & Expertise",
-  description: `Meet ${siteConfig.partners.map((p) => p.name).join(" and ")} — ICAI chartered accountants specializing in GST, audit, ROC, and startup advisory at VS Bansal & Associates, Delhi.`,
+  description: `Meet ${siteConfig.partners.map((p) => p.name).join(" and ")} — ICAI chartered accountants specializing in GST, audit, ROC, and startup advisory at V S bansal & associates, Delhi.`,
   path: "/expertise",
   keywords: ["CA Sumit Bansal", "CA Vineeta Bansal", "chartered accountant Delhi", "ICAI registered CA"],
 });

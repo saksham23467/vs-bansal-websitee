@@ -5,7 +5,7 @@ category: "Startups"
 tags: ["ROC", "GST", "Fundraising"]
 coverImage: "/file.svg"
 date: "2026-03-18"
-author: "VS Bansal & Associates Team"
+author: "V S bansal & associates Team"
 featured: true
 ---
 

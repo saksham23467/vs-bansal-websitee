@@ -125,7 +125,7 @@ export function getPostMetaBySlug(slug: string): BlogPostMeta | null {
     tags: (data.tags as string[]) ?? [],
     coverImage: (data.coverImage as string) ?? "/images/blog/default.jpg",
     date: data.date as string,
-    author: (data.author as string) ?? "VS Bansal & Associates",
+    author: (data.author as string) ?? "V S bansal & associates",
     featured: Boolean(data.featured),
     readingTime: stats.text,
   };

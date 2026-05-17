@@ -8,7 +8,7 @@ import { getTelHref, getWhatsAppUrl, siteConfig } from "@/lib/site-config";
 
 export const metadata = buildMetadata({
   title: "Contact",
-  description: "Book a consultation with VS Bansal & Associates—GST, tax, ROC, audit, and Virtual CFO support across India.",
+  description: "Book a consultation with V S bansal & associates—GST, tax, ROC, audit, and Virtual CFO support across India.",
   path: "/contact",
 });
 

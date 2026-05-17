@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export const metadata = buildMetadata({
   title: "CA Firm Locations — Delhi, Noida, Mumbai & More",
   description:
-    "VS Bansal & Associates serves businesses across Delhi NCR, Mumbai, Bangalore, Pune, Hyderabad, Chennai, Ahmedabad, Jaipur, and pan-India.",
+    "V S bansal & associates serves businesses across Delhi NCR, Mumbai, Bangalore, Pune, Hyderabad, Chennai, Ahmedabad, Jaipur, and pan-India.",
   path: "/locations",
   keywords: ["CA firm locations", "chartered accountant Delhi NCR", "GST consultant near me"],
 });

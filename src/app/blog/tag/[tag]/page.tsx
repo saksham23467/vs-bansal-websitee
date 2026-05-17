@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: Props) {
   const decoded = decodeURIComponent(tag);
   return buildMetadata({
     title: `Tag: ${decoded}`,
-    description: `Blog posts tagged "${decoded}" — VS Bansal & Associates.`,
+    description: `Blog posts tagged "${decoded}" — V S bansal & associates.`,
     path: `/blog/tag/${tag}`,
   });
 }

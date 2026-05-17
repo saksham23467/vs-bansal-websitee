@@ -344,7 +344,7 @@ export function DocumentWorkspace({ mode: modeProp, clients = [], theme = "light
           {activeScope === "CLIENT"
             ? "Files you upload for your CA. Create folders to organise bank statements, invoices, KYC, etc."
             : mode === "client"
-              ? "Files uploaded by VS Bansal & Associates for you. Download only — your CA manages this area."
+              ? "Files uploaded by V S bansal & associates for you. Download only — your CA manages this area."
               : "Files your team uploads for the client. Create folders to organise deliverables and working papers."}
         </p>
       </div>

@@ -8,7 +8,7 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
   title: "Blog",
-  description: "Tax, GST, ROC, and startup compliance insights from VS Bansal & Associates.",
+  description: "Tax, GST, ROC, and startup compliance insights from V S bansal & associates.",
   path: "/blog",
 });
 

@@ -169,12 +169,12 @@ const guidePages: SeoPage[] = [
     slug: "gst-filing-guide-india",
     type: "guide",
     title: "GST Filing Guide India 2026",
-    metaTitle: "GST Filing Guide India 2026 | VS Bansal & Associates",
+    metaTitle: "GST Filing Guide India 2026 | V S bansal & associates",
     metaDescription:
       "Complete GST filing guide for Indian businesses—registration, GSTR-1, GSTR-3B, annual return, penalties, and expert tips from chartered accountants.",
     h1: "GST Filing Guide for Indian Businesses",
     intro:
-      "This guide explains GST registration thresholds, return types, due dates, and common mistakes—written by practicing CAs at VS Bansal & Associates.",
+      "This guide explains GST registration thresholds, return types, due dates, and common mistakes—written by practicing CAs at V S bansal & associates.",
     keywords: ["GST filing guide", "GSTR-1", "GSTR-3B", "GST registration India"],
     faqs: [
       {

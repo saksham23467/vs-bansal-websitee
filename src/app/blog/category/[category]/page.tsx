@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props) {
   const decoded = decodeURIComponent(category);
   return buildMetadata({
     title: `${decoded} — Tax & Compliance Insights`,
-    description: `Articles on ${decoded} from VS Bansal & Associates, chartered accountants in Delhi.`,
+    description: `Articles on ${decoded} from V S bansal & associates, chartered accountants in Delhi.`,
     path: `/blog/category/${category}`,
   });
 }

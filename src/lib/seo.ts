@@ -57,6 +57,10 @@ export function buildMetadata({
           follow: true,
           googleBot: { index: true, follow: true, "max-image-preview": "large" },
         },
+    icons: {
+      icon: [{ url: "/ca-india-logo.png", type: "image/png" }],
+      apple: [{ url: "/ca-india-logo.png", type: "image/png" }],
+    },
   };
 }
 

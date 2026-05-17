@@ -3,7 +3,7 @@ import { Clock, Mail, MapPin, Phone, Star } from "lucide-react";
 import { getTelHref, getWhatsAppUrl, siteConfig } from "@/lib/site-config";
 import { Button } from "@/components/ui/button";
 
-const whatsappUrl = getWhatsAppUrl("Hello, I would like to consult VS Bansal & Associates.");
+const whatsappUrl = getWhatsAppUrl("Hello, I would like to consult V S bansal & associates.");
 
 export function LocalBusinessBlock({ compact = false }: { compact?: boolean }) {
   return (

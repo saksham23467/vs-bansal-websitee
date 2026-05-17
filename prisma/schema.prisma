@@ -243,7 +243,7 @@ model BlogPost {
   published   Boolean  @default(true)
   featured    Boolean  @default(false)
   readingTime Int      @default(5)
-  author      String   @default("VS Bansal & Associates")
+  author      String   @default("V S bansal & associates")
   publishedAt DateTime @default(now())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

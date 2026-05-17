@@ -5,7 +5,7 @@ category: "GST"
 tags: ["GST", "Compliance", "India"]
 coverImage: "/file.svg"
 date: "2026-01-12"
-author: "VS Bansal & Associates Team"
+author: "V S bansal & associates Team"
 featured: true
 ---
 

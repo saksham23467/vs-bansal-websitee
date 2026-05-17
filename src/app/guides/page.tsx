@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export const metadata = buildMetadata({
   title: "Tax & Compliance Guides",
   description:
-    "Free GST, income tax, and startup compliance guides from VS Bansal & Associates — ICAI-registered chartered accountants in Delhi.",
+    "Free GST, income tax, and startup compliance guides from V S bansal & associates — ICAI-registered chartered accountants in Delhi.",
   path: "/guides",
 });
 

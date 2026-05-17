@@ -184,7 +184,7 @@ export function WhyChooseUs() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-14 lg:grid-cols-2 lg:items-center">
           <SectionHeading
-            eyebrow="Why VS Bansal"
+            eyebrow="Why V S bansal & associates"
             title="A partner for regulated scale—not just periodic filings"
             description="We combine technical depth with operating rhythm: calendars, MIS, and proactive nudges before deadlines bite."
             align="left"
@@ -249,7 +249,7 @@ export function ProcessSection() {
 const testimonials = [
   {
     quote:
-      "VS Bansal shifted us from reactive panic-mode filings to a predictable monthly cadence. Their GST desk is surgical.",
+      "V S bansal & associates shifted us from reactive panic-mode filings to a predictable monthly cadence. Their GST desk is surgical.",
     name: "Priya Nair",
     role: "CFO, B2B SaaS",
   },

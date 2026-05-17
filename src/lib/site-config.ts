@@ -1,10 +1,10 @@
 export const siteConfig = {
-  name: "VS Bansal & Associates",
-  shortName: "VS Bansal & Associates",
-  legalName: "VS Bansal & Associates",
+  name: "V S bansal & associates",
+  shortName: "V S bansal & associates",
+  legalName: "V S bansal & associates",
   tagline: "Trusted Chartered Accountants in Delhi NCR & Across India",
   description:
-    "VS Bansal & Associates is an ICAI-registered chartered accountancy firm led by CA Sumit Bansal and CA Vineeta Bansal. Expert GST filing, income tax, ROC compliance, company registration, Virtual CFO, and startup advisory from Pitampura, Delhi.",
+    "V S bansal & associates is an ICAI-registered chartered accountancy firm led by CA Sumit Bansal and CA Vineeta Bansal. Expert GST filing, income tax, ROC compliance, company registration, Virtual CFO, and startup advisory from Pitampura, Delhi.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://vsbansalassociates.com",
   phone: "+91 98105 58120",
   phoneDisplay: "+91 98105 58120",
@@ -72,7 +72,7 @@ export const siteConfig = {
     "virtual CFO India",
     "startup CA services",
     "income tax filing Delhi",
-    "VS Bansal Associates",
+    "V S bansal associates",
     "CA Sumit Bansal",
     "CA Vineeta Bansal",
   ],
@@ -100,6 +100,6 @@ export function getTelHref(phone = siteConfig.phone) {
 
 /** WhatsApp chat URL — always uses site WhatsApp number */
 export function getWhatsAppUrl(message?: string) {
-  const text = message ?? "Hello VS Bansal & Associates, I would like to book a consultation.";
+  const text = message ?? "Hello V S bansal & associates, I would like to book a consultation.";
   return `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(text)}`;
 }

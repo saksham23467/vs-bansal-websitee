@@ -16,7 +16,7 @@ export type ContactEmailPayload = {
 function buildEmailContent(data: ContactEmailPayload) {
   const subject = `New website enquiry: ${data.name}`;
   const text = [
-    "New message from the VS Bansal & Associates website contact form.",
+    "New message from the V S bansal & associates website contact form.",
     "",
     `Name: ${data.name}`,
     `Email: ${data.email}`,
@@ -39,7 +39,7 @@ async function sendViaResend(data: ContactEmailPayload) {
   await resend.emails.send({
     from:
       process.env.RESEND_FROM ??
-      "VS Bansal & Associates <onboarding@resend.dev>",
+      "V S bansal & associates <onboarding@resend.dev>",
     to: [NOTIFY_EMAIL],
     replyTo: data.email,
     subject,
@@ -64,7 +64,7 @@ async function sendViaSmtp(data: ContactEmailPayload) {
   await transporter.sendMail({
     from:
       process.env.SMTP_FROM?.trim() ||
-      `VS Bansal & Associates <${user}>`,
+      `V S bansal & associates <${user}>`,
     to: NOTIFY_EMAIL,
     replyTo: data.email,
     subject,

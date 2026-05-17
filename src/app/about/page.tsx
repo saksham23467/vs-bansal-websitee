@@ -9,14 +9,14 @@ import { buildMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata = buildMetadata({
-  title: "About VS Bansal & Associates",
+  title: "About V S bansal & associates",
   description: `Meet ${siteConfig.partners.map((p) => p.name).join(" and ")} — ICAI chartered accountants in Pitampura, Delhi. GST, tax, audit & startup advisory since ${siteConfig.founded}.`,
   path: "/about",
-  keywords: ["VS Bansal Associates", "CA Sumit Bansal", "CA Vineeta Bansal", "chartered accountant Pitampura"],
+  keywords: ["V S bansal associates", "CA Sumit Bansal", "CA Vineeta Bansal", "chartered accountant Pitampura"],
 });
 
 const timeline = [
-  { year: "1998", label: "Practice established", detail: "VS Bansal & Associates founded in Delhi with a focus on tax and assurance for local businesses." },
+  { year: "1998", label: "Practice established", detail: "V S bansal & associates founded in Delhi with a focus on tax and assurance for local businesses." },
   { year: "2014", label: "GST readiness", detail: "Helped hundreds of clients transition to GST with training and systems." },
   { year: "2019", label: "Next-gen leadership", detail: "CA Sumit Bansal and CA Vineeta Bansal joined as partners, expanding startup and ROC practices." },
   { year: "2024", label: "Digital client portal", detail: "Secure portal for documents, compliance tracking, and partner communication." },

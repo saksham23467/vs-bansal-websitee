@@ -179,7 +179,7 @@ export default async function ProgrammaticSeoPage({ params }: Props) {
                       Pan-India clients welcome. Primary office at Pitampura for in-person meetings.
                     </p>
                     <iframe
-                      title="VS Bansal Associates office location"
+                      title="V S bansal & associates office location"
                       src={siteConfig.googleMapsEmbed}
                       className="mt-4 h-72 w-full rounded-2xl border border-navy-100 dark:border-navy-800"
                       loading="lazy"
