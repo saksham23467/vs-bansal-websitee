@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 const nav = [
   { href: "/portal", label: "Overview", icon: LayoutDashboard },
-  { href: "/portal#documents", label: "Documents", icon: FileText },
+  { href: "/portal/documents", label: "Documents", icon: FileText },
   { href: "/portal#compliance", label: "Compliance", icon: ClipboardList },
   { href: "/portal#messages", label: "Messages", icon: MessageSquare },
 ];

@@ -105,8 +105,11 @@ CREATE TABLE "Appointment" (
 CREATE TABLE "Document" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
+    "fileName" TEXT NOT NULL,
     "fileUrl" TEXT NOT NULL,
+    "storageKey" TEXT NOT NULL,
     "fileType" TEXT,
+    "fileSize" INTEGER,
     "category" TEXT,
     "userId" TEXT NOT NULL,
     "uploadedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -216,6 +219,9 @@ CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token"
 
 -- CreateIndex
 CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token");
+
+-- CreateIndex
+CREATE INDEX "Document_userId_idx" ON "Document"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Invoice_number_key" ON "Invoice"("number");

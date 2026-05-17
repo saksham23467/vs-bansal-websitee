@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { auth } from "@/lib/auth";
+import { DocumentList } from "@/components/portal/document-list";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { buildMetadata } from "@/lib/seo";
@@ -37,12 +38,14 @@ export default async function PortalDashboardPage() {
 
       <div id="documents" className="grid gap-6 scroll-mt-28 md:grid-cols-2">
         <Card>
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-lg">Documents</CardTitle>
+            <Button asChild size="sm" variant="secondary">
+              <Link href="/portal/documents">View all</Link>
+            </Button>
           </CardHeader>
-          <CardContent className="text-sm text-navy-600 dark:text-navy-300">
-            Secure document exchange will appear here as your engagement progresses. Upload requests are emailed with
-            direct links.
+          <CardContent>
+            <DocumentList emptyMessage="No documents yet. Your CA will upload files here for you to download." />
           </CardContent>
         </Card>
         <Card id="compliance">

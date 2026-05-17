@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# private client uploads (local dev)
+/private/uploads
+
 # production
 /build
 

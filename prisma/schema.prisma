@@ -131,12 +131,17 @@ model Appointment {
 model Document {
   id         String   @id @default(cuid())
   title      String
+  fileName   String
   fileUrl    String
+  storageKey String
   fileType   String?
+  fileSize   Int?
   category   String?
   userId     String
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   uploadedAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 model ComplianceItem {

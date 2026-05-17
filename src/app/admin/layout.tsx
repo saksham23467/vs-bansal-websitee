@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { LayoutDashboard, Users, FileSpreadsheet, LogOut, Shield } from "lucide-react";
+import { LayoutDashboard, Users, FileSpreadsheet, FileText, LogOut, Shield } from "lucide-react";
 import { auth, signOut } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -9,6 +9,7 @@ const adminNav = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
   { href: "/admin#leads", label: "Leads", icon: Users },
   { href: "/admin#reports", label: "Reports", icon: FileSpreadsheet },
+  { href: "/admin/documents", label: "Documents", icon: FileText },
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
