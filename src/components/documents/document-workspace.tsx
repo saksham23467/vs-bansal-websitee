@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { UserRole } from "@prisma/client";
 import { Download, Loader2, RefreshCw, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -44,11 +46,22 @@ function formatDate(iso: string) {
   });
 }
 
-export function DocumentWorkspace({ mode, clients = [], theme = "light" }: Props) {
+export function DocumentWorkspace({ mode: modeProp, clients = [], theme = "light" }: Props) {
+  const { data: session } = useSession();
+  const isStaffOrAdmin =
+    session?.user?.role === UserRole.ADMIN || session?.user?.role === UserRole.STAFF;
+  const mode = modeProp === "admin" || isStaffOrAdmin ? "admin" : "client";
+
   const isDark = theme === "dark";
   const [userId, setUserId] = useState(
     mode === "admin" ? (clients[0]?.id ?? "") : undefined
   );
+
+  useEffect(() => {
+    if (mode === "admin" && clients[0]?.id && !userId) {
+      setUserId(clients[0].id);
+    }
+  }, [mode, clients, userId]);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [file, setFile] = useState<File | null>(null);
