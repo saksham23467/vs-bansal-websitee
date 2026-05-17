@@ -20,6 +20,8 @@ export function assertStorageConfigured() {
 
 export async function storeDocumentFile(
   userId: string,
+  scope: string,
+  folderId: string | null,
   documentId: string,
   fileName: string,
   buffer: Buffer,
@@ -27,7 +29,7 @@ export async function storeDocumentFile(
 ): Promise<{ storageKey: string; fileUrl: string }> {
   assertStorageConfigured();
 
-  const storageKey = buildStorageKey(userId, documentId, fileName);
+  const storageKey = buildStorageKey(userId, scope, folderId, documentId, fileName);
 
   if (useBlob) {
     const blob = await put(storageKey, buffer, {

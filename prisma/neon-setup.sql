@@ -16,6 +16,9 @@ CREATE TYPE "ComplianceStatus" AS ENUM ('PENDING', 'IN_PROGRESS', 'FILED', 'OVER
 -- CreateEnum
 CREATE TYPE "TaskStatus" AS ENUM ('TODO', 'IN_PROGRESS', 'DONE');
 
+-- CreateEnum
+CREATE TYPE "DocumentOwnerScope" AS ENUM ('CLIENT', 'ADMIN');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -103,6 +106,19 @@ CREATE TABLE "Appointment" (
 );
 
 -- CreateTable
+CREATE TABLE "DocumentFolder" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "scope" "DocumentOwnerScope" NOT NULL,
+    "parentId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "DocumentFolder_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Document" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -112,6 +128,8 @@ CREATE TABLE "Document" (
     "fileType" TEXT,
     "fileSize" INTEGER,
     "category" TEXT,
+    "scope" "DocumentOwnerScope" NOT NULL DEFAULT 'CLIENT',
+    "folderId" TEXT,
     "userId" TEXT NOT NULL,
     "uploadedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -222,7 +240,13 @@ CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token"
 CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token");
 
 -- CreateIndex
+CREATE INDEX "DocumentFolder_userId_scope_idx" ON "DocumentFolder"("userId", "scope");
+CREATE INDEX "DocumentFolder_parentId_idx" ON "DocumentFolder"("parentId");
+
+-- CreateIndex
 CREATE INDEX "Document_userId_idx" ON "Document"("userId");
+CREATE INDEX "Document_folderId_idx" ON "Document"("folderId");
+CREATE INDEX "Document_userId_scope_idx" ON "Document"("userId", "scope");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Invoice_number_key" ON "Invoice"("number");
@@ -240,6 +264,11 @@ ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId"
 ALTER TABLE "Appointment" ADD CONSTRAINT "Appointment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "DocumentFolder" ADD CONSTRAINT "DocumentFolder_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "DocumentFolder" ADD CONSTRAINT "DocumentFolder_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "DocumentFolder"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Document" ADD CONSTRAINT "Document_folderId_fkey" FOREIGN KEY ("folderId") REFERENCES "DocumentFolder"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 ALTER TABLE "Document" ADD CONSTRAINT "Document_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey

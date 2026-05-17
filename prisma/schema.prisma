@@ -41,6 +41,11 @@ enum TaskStatus {
   DONE
 }
 
+enum DocumentOwnerScope {
+  CLIENT
+  ADMIN
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -58,8 +63,9 @@ model User {
 
   accounts      Account[]
   sessions      Session[]
-  documents     Document[]
-  compliance    ComplianceItem[]
+  documents       Document[]
+  documentFolders DocumentFolder[]
+  compliance      ComplianceItem[]
   tasks         Task[]
   invoices      Invoice[]
   notifications Notification[]
@@ -130,8 +136,25 @@ model Appointment {
   updatedAt DateTime          @updatedAt
 }
 
+model DocumentFolder {
+  id        String             @id @default(cuid())
+  name      String
+  userId    String
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scope     DocumentOwnerScope
+  parentId  String?
+  parent    DocumentFolder?    @relation("DocumentFolderTree", fields: [parentId], references: [id], onDelete: Cascade)
+  children  DocumentFolder[]   @relation("DocumentFolderTree")
+  documents Document[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  @@index([userId, scope])
+  @@index([parentId])
+}
+
 model Document {
-  id         String   @id @default(cuid())
+  id         String             @id @default(cuid())
   title      String
   fileName   String
   fileUrl    String
@@ -139,11 +162,16 @@ model Document {
   fileType   String?
   fileSize   Int?
   category   String?
+  scope      DocumentOwnerScope @default(CLIENT)
+  folderId   String?
+  folder     DocumentFolder?    @relation(fields: [folderId], references: [id], onDelete: SetNull)
   userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  uploadedAt DateTime @default(now())
+  user       User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  uploadedAt DateTime           @default(now())
 
   @@index([userId])
+  @@index([folderId])
+  @@index([userId, scope])
 }
 
 model ComplianceItem {

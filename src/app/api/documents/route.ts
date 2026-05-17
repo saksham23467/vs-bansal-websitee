@@ -1,12 +1,17 @@
 import { NextResponse } from "next/server";
-import { Prisma } from "@prisma/client";
-import { UserRole } from "@prisma/client";
+import { DocumentOwnerScope, Prisma, UserRole } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
   MAX_DOCUMENT_BYTES,
   resolveMimeType,
 } from "@/lib/documents";
+import {
+  getFolderForUser,
+  parseDocumentScope,
+  resolveClientUserId,
+  uploadScopeForRole,
+} from "@/lib/document-access";
 import { assertStorageConfigured, storeDocumentFile } from "@/lib/document-storage";
 
 export const runtime = "nodejs";
@@ -18,19 +23,41 @@ export async function GET(req: Request) {
   }
 
   const { searchParams } = new URL(req.url);
-  const forUserId = searchParams.get("userId");
-
   const role = session.user.role as UserRole;
+  const scope = parseDocumentScope(searchParams.get("scope"));
+  const folderIdParam = searchParams.get("folderId");
 
-  if (forUserId && role !== UserRole.ADMIN && role !== UserRole.STAFF) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const resolved = await resolveClientUserId(
+    role,
+    session.user.id,
+    searchParams.get("userId")
+  );
+  if ("error" in resolved) {
+    return NextResponse.json({ error: resolved.error }, { status: resolved.status });
   }
 
-  const userId =
-    role === UserRole.CLIENT ? session.user.id : (forUserId ?? session.user.id);
+  const folderId =
+    folderIdParam === null || folderIdParam === "" || folderIdParam === "root"
+      ? null
+      : folderIdParam;
+
+  if (!scope) {
+    return NextResponse.json({ error: "scope is required (CLIENT or ADMIN)" }, { status: 400 });
+  }
+
+  if (folderId) {
+    const folder = await getFolderForUser(folderId, resolved.userId);
+    if (!folder || folder.scope !== scope) {
+      return NextResponse.json({ error: "Folder not found" }, { status: 404 });
+    }
+  }
 
   const documents = await prisma.document.findMany({
-    where: { userId },
+    where: {
+      userId: resolved.userId,
+      scope,
+      folderId,
+    },
     orderBy: { uploadedAt: "desc" },
     select: {
       id: true,
@@ -39,6 +66,8 @@ export async function GET(req: Request) {
       fileType: true,
       fileSize: true,
       category: true,
+      scope: true,
+      folderId: true,
       uploadedAt: true,
     },
   });
@@ -65,19 +94,35 @@ export async function POST(req: Request) {
   const category = formData.get("category");
   const file = formData.get("file");
   const requestedUserId = formData.get("userId");
+  const folderIdRaw = formData.get("folderId");
+  const scopeRaw = formData.get("scope");
 
-  let targetUserId: string;
+  const uploadScope = uploadScopeForRole(role);
+  const scopeParam = typeof scopeRaw === "string" ? parseDocumentScope(scopeRaw) : null;
+  const scope: DocumentOwnerScope = scopeParam ?? uploadScope;
 
-  if (role === UserRole.CLIENT) {
-    targetUserId = session.user.id;
-  } else if (role === UserRole.ADMIN || role === UserRole.STAFF) {
-    if (typeof requestedUserId !== "string" || !requestedUserId) {
-      return NextResponse.json({ error: "Select a client" }, { status: 400 });
-    }
-    targetUserId = requestedUserId;
-  } else {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (role === UserRole.CLIENT && scope !== DocumentOwnerScope.CLIENT) {
+    return NextResponse.json(
+      { error: "Clients can only upload to their own uploads folder" },
+      { status: 403 }
+    );
   }
+
+  const resolved = await resolveClientUserId(
+    role,
+    session.user.id,
+    typeof requestedUserId === "string" ? requestedUserId : null
+  );
+  if ("error" in resolved) {
+    return NextResponse.json({ error: resolved.error }, { status: resolved.status });
+  }
+
+  const targetUserId = resolved.userId;
+
+  const folderId =
+    typeof folderIdRaw === "string" && folderIdRaw && folderIdRaw !== "root"
+      ? folderIdRaw
+      : null;
 
   if (typeof title !== "string" || title.trim().length < 2) {
     return NextResponse.json({ error: "Title is required" }, { status: 400 });
@@ -86,21 +131,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "File is required" }, { status: 400 });
   }
 
-  const owner = await prisma.user.findUnique({
-    where: { id: targetUserId },
-    select: { id: true, role: true },
-  });
-
-  if (!owner) {
-    return NextResponse.json({ error: "User not found" }, { status: 400 });
-  }
-
-  if (role === UserRole.CLIENT && owner.id !== session.user.id) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
-
-  if (role !== UserRole.CLIENT && owner.role !== UserRole.CLIENT) {
-    return NextResponse.json({ error: "Documents must belong to a client account" }, { status: 400 });
+  if (folderId) {
+    const folder = await getFolderForUser(folderId, targetUserId);
+    if (!folder || folder.scope !== scope) {
+      return NextResponse.json({ error: "Folder not found" }, { status: 404 });
+    }
   }
 
   if (file.size > MAX_DOCUMENT_BYTES) {
@@ -110,7 +145,10 @@ export async function POST(req: Request) {
   const mimeType = resolveMimeType(file);
   if (!mimeType) {
     return NextResponse.json(
-      { error: "File type not allowed. Use PDF, images, Excel, Word, CSV, or TXT." },
+      {
+        error:
+          "File type not allowed. Use PDF, ZIP, images, Excel, Word, CSV, or TXT.",
+      },
       { status: 400 }
     );
   }
@@ -136,16 +174,18 @@ export async function POST(req: Request) {
   let document;
   try {
     document = await prisma.document.create({
-    data: {
-      title: title.trim(),
-      fileName,
-      fileUrl: "",
-      storageKey: "",
-      fileType: mimeType,
-      fileSize: file.size,
-      category: typeof category === "string" && category ? category : null,
-      userId: targetUserId,
-    },
+      data: {
+        title: title.trim(),
+        fileName,
+        fileUrl: "",
+        storageKey: "",
+        fileType: mimeType,
+        fileSize: file.size,
+        category: typeof category === "string" && category ? category : null,
+        userId: targetUserId,
+        scope,
+        folderId,
+      },
     });
   } catch (error) {
     console.error("Document DB create error:", error);
@@ -153,7 +193,7 @@ export async function POST(req: Request) {
       return NextResponse.json(
         {
           error:
-            "Document table not ready. In Neon SQL Editor, run prisma/document-migration.sql then try again.",
+            "Document tables not ready. In Neon SQL Editor, run prisma/folder-migration.sql then try again.",
         },
         { status: 503 }
       );
@@ -169,13 +209,15 @@ export async function POST(req: Request) {
     }
     return NextResponse.json(
       { error: "Could not save document. Check database setup." },
-      { status: 503 }
+      { status: 500 }
     );
   }
 
   try {
     const stored = await storeDocumentFile(
       targetUserId,
+      scope,
+      folderId,
       document.id,
       fileName,
       buffer,

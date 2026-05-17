@@ -13,6 +13,8 @@ export const ALLOWED_MIME_TYPES = new Set([
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "text/csv",
   "text/plain",
+  "application/zip",
+  "application/x-zip-compressed",
   "application/octet-stream",
 ]);
 
@@ -28,6 +30,7 @@ const EXT_TO_MIME: Record<string, string> = {
   docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   csv: "text/csv",
   txt: "text/plain",
+  zip: "application/zip",
 };
 
 export function resolveMimeType(file: File): string | null {
@@ -50,8 +53,15 @@ export function sanitizeFileName(name: string): string {
   return name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 120) || "document";
 }
 
-export function buildStorageKey(userId: string, documentId: string, fileName: string): string {
-  return `documents/${userId}/${documentId}/${sanitizeFileName(fileName)}`;
+export function buildStorageKey(
+  userId: string,
+  scope: string,
+  folderId: string | null,
+  documentId: string,
+  fileName: string
+): string {
+  const folderSegment = folderId ?? "root";
+  return `documents/${userId}/${scope}/${folderSegment}/${documentId}/${sanitizeFileName(fileName)}`;
 }
 
 export const DOCUMENT_CATEGORIES = [
