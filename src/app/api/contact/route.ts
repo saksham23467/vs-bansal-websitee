@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
-import { Resend } from "resend";
 import { prisma } from "@/lib/prisma";
-import { siteConfig } from "@/lib/site-config";
+import { sendContactNotification } from "@/lib/send-contact-email";
 import { getClientIp, rateLimit } from "@/lib/rate-limit";
 
 const contactSchema = z.object({
@@ -78,30 +77,13 @@ export async function POST(req: Request) {
     );
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
-  const notifyTo = process.env.CONTACT_NOTIFY_EMAIL ?? siteConfig.email;
+  const mail = await sendContactNotification({
+    name,
+    email,
+    phone,
+    service,
+    message,
+  });
 
-  if (apiKey) {
-    try {
-      const resend = new Resend(apiKey);
-      await resend.emails.send({
-        from: process.env.RESEND_FROM ?? "VS Bansal & Associates <onboarding@resend.dev>",
-        to: [notifyTo],
-        replyTo: email,
-        subject: `New lead: ${name}`,
-        text: [
-          `Name: ${name}`,
-          `Email: ${email}`,
-          `Phone: ${phone ?? "—"}`,
-          `Service: ${service ?? "—"}`,
-          "",
-          message,
-        ].join("\n"),
-      });
-    } catch (e) {
-      console.error("Resend error", e);
-    }
-  }
-
-  return NextResponse.json({ ok: true, id: lead.id });
+  return NextResponse.json({ ok: true, id: lead.id, emailSent: mail.sent });
 }
