@@ -79,7 +79,7 @@ export function organizationJsonLd() {
     name: siteConfig.name,
     legalName: siteConfig.legalName,
     url: siteConfig.url,
-    logo: `${siteConfig.url}/icon`,
+    logo: `${siteConfig.url}/ca-india-logo.png`,
     description: siteConfig.description,
     email: siteConfig.email,
     telephone: siteConfig.phone,
@@ -187,7 +187,7 @@ export function articleJsonLd(params: {
     publisher: {
       "@type": "Organization",
       name: siteConfig.name,
-      logo: { "@type": "ImageObject", url: `${siteConfig.url}/icon` },
+      logo: { "@type": "ImageObject", url: `${siteConfig.url}/ca-india-logo.png` },
     },
     image: params.image ?? `${siteConfig.url}/api/og`,
     mainEntityOfPage: params.url,

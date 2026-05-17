@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FadeIn } from "@/components/shared/fade-in";
+import { BrandMark } from "@/components/layout/brand-mark";
 
 function LoginForm() {
   const router = useRouter();
@@ -43,7 +44,8 @@ function LoginForm() {
   return (
     <FadeIn className="w-full max-w-md">
       <Card className="border-navy-100 shadow-xl dark:border-navy-800">
-        <CardHeader>
+        <CardHeader className="items-center text-center">
+          <BrandMark size={56} className="mb-2" />
           <CardTitle className="text-2xl">Client portal</CardTitle>
           <CardDescription>
             Sign in to upload and download documents. You stay logged in for 30 days.
