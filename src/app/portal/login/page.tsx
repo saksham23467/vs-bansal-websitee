@@ -31,7 +31,9 @@ function LoginForm() {
     });
     setLoading(false);
     if (res?.error) {
-      setError("Invalid email or password.");
+      setError(
+        "Invalid email or password. If this is your first deploy, run database setup (see README) to create portal users."
+      );
       return;
     }
     router.push(callbackUrl);

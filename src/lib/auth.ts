@@ -24,16 +24,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const parsed = credentialsSchema.safeParse(credentials);
         if (!parsed.success) return null;
 
-        const user = await prisma.user.findUnique({
-          where: { email: parsed.data.email },
-        });
+        const email = parsed.data.email.trim().toLowerCase();
+
+        let user;
+        try {
+          user = await prisma.user.findUnique({
+            where: { email },
+          });
+        } catch (error) {
+          console.error("Login DB error:", error);
+          return null;
+        }
 
         if (!user?.passwordHash) return null;
 
-        const valid = await bcrypt.compare(
-          parsed.data.password,
-          user.passwordHash
-        );
+        const valid = await bcrypt.compare(parsed.data.password, user.passwordHash);
         if (!valid) return null;
 
         return {
