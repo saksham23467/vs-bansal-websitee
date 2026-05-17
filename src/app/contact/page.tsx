@@ -83,11 +83,24 @@ export default function ContactPage() {
             </FadeIn>
             <FadeIn delay={0.05}>
               <Card className="overflow-hidden">
-                <div className="flex aspect-video items-center justify-center bg-navy-100 text-sm text-navy-500 dark:bg-navy-800 dark:text-navy-400">
-                  <div className="px-6 text-center">
-                    <MapPin className="mx-auto mb-2 h-8 w-8 text-royal-600" />
-                    Map placeholder — embed Google Maps with your workspace coordinates.
-                  </div>
+                <iframe
+                  title="V S bansal & associates office location"
+                  src={siteConfig.googleMapsEmbed}
+                  className="aspect-video w-full border-0"
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+                <div className="border-t border-navy-100 p-3 dark:border-navy-800">
+                  <a
+                    href={siteConfig.googleMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-royal-600 hover:underline"
+                  >
+                    <MapPin className="h-4 w-4" />
+                    Open in Google Maps
+                  </a>
                 </div>
               </Card>
             </FadeIn>
