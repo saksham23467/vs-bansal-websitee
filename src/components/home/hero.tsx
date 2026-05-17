@@ -12,7 +12,7 @@ const whatsappUrl = getWhatsAppUrl();
 export function Hero() {
   return (
     <section className="gradient-hero relative overflow-hidden pb-20 pt-28 lg:pb-32 lg:pt-36">
-      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-30" />
+      <div className="pointer-events-none absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-30" aria-hidden />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <motion.div

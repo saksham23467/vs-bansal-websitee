@@ -38,8 +38,8 @@ const team = siteConfig.partners.map((p) => ({
 export default function AboutPage() {
   return (
     <>
-      <section className="gradient-hero border-b border-navy-100 pb-16 pt-28 dark:border-navy-800 lg:pb-24 lg:pt-32">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-30" />
+      <section className="gradient-hero relative overflow-hidden border-b border-navy-100 pb-16 pt-28 dark:border-navy-800 lg:pb-24 lg:pt-32">
+        <div className="pointer-events-none absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-30" aria-hidden />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <Badge variant="navy" className="mb-4">
