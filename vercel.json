@@ -1,7 +1,11 @@
 {
   "buildCommand": "node scripts/prisma-generate.mjs && next build",
-  "installCommand": "npm install",
+  "installCommand": "DATABASE_URL=postgresql://build:build@localhost:5432/build?schema=public npm install",
   "framework": "nextjs",
+  "env": {
+    "AUTH_TRUST_HOST": "true",
+    "DATABASE_URL": "postgresql://build:build@localhost:5432/build?schema=public"
+  },
   "build": {
     "env": {
       "DATABASE_URL": "postgresql://build:build@localhost:5432/build?schema=public"
