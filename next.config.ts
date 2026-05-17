@@ -24,6 +24,11 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "16mb",
+    },
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [{ protocol: "https", hostname: "**" }],

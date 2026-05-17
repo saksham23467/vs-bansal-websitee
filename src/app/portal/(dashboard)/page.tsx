@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { auth } from "@/lib/auth";
-import { DocumentList } from "@/components/portal/document-list";
+import { FileText, Upload, Shield } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
   title: "Client portal",
-  description: "Your VS Bansal & Associates client workspace for compliance and documents.",
+  description: "Your VS Bansal & Associates client workspace",
   path: "/portal",
 });
 
@@ -21,61 +21,80 @@ export default async function PortalDashboardPage() {
           Welcome{session?.user?.name ? `, ${session.user.name}` : ""}
         </h1>
         <p className="mt-2 text-navy-600 dark:text-navy-300">
-          Track filings, uploads, and messages from your engagement team.
+          Upload documents, track compliance, and stay connected with your CA team.
         </p>
       </div>
 
-      {session?.user?.role === "ADMIN" && (
-        <Card className="border-royal-500/30 bg-royal-50/50 dark:bg-navy-900/60">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-lg">Administrator</CardTitle>
-            <Button asChild size="sm">
-              <Link href="/admin">Open admin</Link>
-            </Button>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Card className="border-royal-200 bg-gradient-to-br from-royal-50 to-white dark:border-navy-800 dark:from-navy-900 dark:to-navy-950">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <FileText className="h-5 w-5 text-royal-600" />
+              Documents
+            </CardTitle>
           </CardHeader>
-        </Card>
-      )}
-
-      <div id="documents" className="grid gap-6 scroll-mt-28 md:grid-cols-2">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-lg">Documents</CardTitle>
-            <Button asChild size="sm" variant="secondary">
-              <Link href="/portal/documents">View all</Link>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-navy-600 dark:text-navy-300">
+              Upload bank statements, invoices, or KYC — your CA downloads them from the same secure
+              folder. Other clients cannot see your files.
+            </p>
+            <Button asChild className="w-full gap-2 sm:w-auto">
+              <Link href="/portal/documents">
+                <Upload className="h-4 w-4" />
+                Upload & view documents
+              </Link>
             </Button>
-          </CardHeader>
-          <CardContent>
-            <DocumentList emptyMessage="No documents yet. Your CA will upload files here for you to download." />
           </CardContent>
         </Card>
-        <Card id="compliance">
+
+        {session?.user?.role === "ADMIN" && (
+          <Card className="border-royal-500/30 bg-royal-50/50 dark:bg-navy-900/60">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <Shield className="h-5 w-5 text-royal-600" />
+                Administrator
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-sm text-navy-600 dark:text-navy-300">
+                Manage client documents and view leads.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <Button asChild size="sm">
+                  <Link href="/admin/documents">Client documents</Link>
+                </Button>
+                <Button asChild size="sm" variant="outline">
+                  <Link href="/admin">Admin overview</Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      <div id="compliance" className="grid gap-6 scroll-mt-28 md:grid-cols-2">
+        <Card id="messages">
           <CardHeader>
             <CardTitle className="text-lg">Compliance calendar</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-navy-600 dark:text-navy-300">
-            Filing statuses and due dates sync from our practice management tools. Your relationship owner shares monthly
-            summaries on email.
+            Filing statuses and due dates are shared by your relationship manager on email. Portal
+            calendar sync is coming soon.
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Messages</CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm text-navy-600 dark:text-navy-300">
+            For urgent queries, use WhatsApp or email — we attach replies to your matter file.
           </CardContent>
         </Card>
       </div>
 
-      <Card id="messages">
-        <CardHeader>
-          <CardTitle className="text-lg">Messages</CardTitle>
-        </CardHeader>
-        <CardContent className="text-sm text-navy-600 dark:text-navy-300">
-          Portal messaging is rolling out—until then, reply on email or WhatsApp and we thread it to your matter file.
-        </CardContent>
-      </Card>
-
-      <div className="flex flex-wrap gap-3">
-        <Button asChild variant="outline">
-          <Link href="/contact">Contact desk</Link>
-        </Button>
-        <Button asChild variant="secondary">
-          <Link href="/services">Services</Link>
-        </Button>
-      </div>
+      <Button asChild variant="outline">
+        <Link href="/contact">Contact desk</Link>
+      </Button>
     </div>
   );
 }

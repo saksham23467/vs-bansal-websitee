@@ -45,7 +45,9 @@ function LoginForm() {
       <Card className="border-navy-100 shadow-xl dark:border-navy-800">
         <CardHeader>
           <CardTitle className="text-2xl">Client portal</CardTitle>
-          <CardDescription>Sign in to view compliance, documents, and messages.</CardDescription>
+          <CardDescription>
+            Sign in to upload and download documents. You stay logged in for 30 days.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={onSubmit} className="space-y-4">

@@ -2,8 +2,13 @@ import { NextResponse } from "next/server";
 import { UserRole } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { ALLOWED_MIME_TYPES, MAX_DOCUMENT_BYTES } from "@/lib/documents";
+import {
+  MAX_DOCUMENT_BYTES,
+  resolveMimeType,
+} from "@/lib/documents";
 import { storeDocumentFile } from "@/lib/document-storage";
+
+export const runtime = "nodejs";
 
 export async function GET(req: Request) {
   const session = await auth();
@@ -47,9 +52,6 @@ export async function POST(req: Request) {
   }
 
   const role = session.user.role as UserRole;
-  if (role !== UserRole.ADMIN && role !== UserRole.STAFF) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
 
   let formData: FormData;
   try {
@@ -58,14 +60,24 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid form data" }, { status: 400 });
   }
 
-  const userId = formData.get("userId");
   const title = formData.get("title");
   const category = formData.get("category");
   const file = formData.get("file");
+  const requestedUserId = formData.get("userId");
 
-  if (typeof userId !== "string" || !userId) {
-    return NextResponse.json({ error: "Client is required" }, { status: 400 });
+  let targetUserId: string;
+
+  if (role === UserRole.CLIENT) {
+    targetUserId = session.user.id;
+  } else if (role === UserRole.ADMIN || role === UserRole.STAFF) {
+    if (typeof requestedUserId !== "string" || !requestedUserId) {
+      return NextResponse.json({ error: "Select a client" }, { status: 400 });
+    }
+    targetUserId = requestedUserId;
+  } else {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
+
   if (typeof title !== "string" || title.trim().length < 2) {
     return NextResponse.json({ error: "Title is required" }, { status: 400 });
   }
@@ -73,21 +85,33 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "File is required" }, { status: 400 });
   }
 
-  const client = await prisma.user.findUnique({
-    where: { id: userId },
+  const owner = await prisma.user.findUnique({
+    where: { id: targetUserId },
     select: { id: true, role: true },
   });
-  if (!client || client.role !== UserRole.CLIENT) {
-    return NextResponse.json({ error: "Invalid client" }, { status: 400 });
+
+  if (!owner) {
+    return NextResponse.json({ error: "User not found" }, { status: 400 });
+  }
+
+  if (role === UserRole.CLIENT && owner.id !== session.user.id) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  if (role !== UserRole.CLIENT && owner.role !== UserRole.CLIENT) {
+    return NextResponse.json({ error: "Documents must belong to a client account" }, { status: 400 });
   }
 
   if (file.size > MAX_DOCUMENT_BYTES) {
     return NextResponse.json({ error: "File must be under 15 MB" }, { status: 400 });
   }
 
-  const mimeType = file.type || "application/octet-stream";
-  if (!ALLOWED_MIME_TYPES.has(mimeType)) {
-    return NextResponse.json({ error: "File type not allowed" }, { status: 400 });
+  const mimeType = resolveMimeType(file);
+  if (!mimeType) {
+    return NextResponse.json(
+      { error: "File type not allowed. Use PDF, images, Excel, Word, CSV, or TXT." },
+      { status: 400 }
+    );
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
@@ -102,13 +126,13 @@ export async function POST(req: Request) {
       fileType: mimeType,
       fileSize: file.size,
       category: typeof category === "string" && category ? category : null,
-      userId,
+      userId: targetUserId,
     },
   });
 
   try {
     const stored = await storeDocumentFile(
-      userId,
+      targetUserId,
       document.id,
       fileName,
       buffer,
@@ -127,6 +151,10 @@ export async function POST(req: Request) {
   } catch (error) {
     await prisma.document.delete({ where: { id: document.id } }).catch(() => {});
     console.error("Document upload error:", error);
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+    const message =
+      error instanceof Error && error.message.includes("BLOB")
+        ? "File storage not configured. Add Vercel Blob on production."
+        : "Upload failed. Check database connection and try again.";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
