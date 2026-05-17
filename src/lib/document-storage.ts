@@ -4,9 +4,18 @@ import { del, get, put } from "@vercel/blob";
 import { buildStorageKey } from "@/lib/documents";
 
 const useBlob = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+const isVercel = Boolean(process.env.VERCEL);
 
 function localPath(storageKey: string) {
   return path.join(process.cwd(), "private", "uploads", storageKey);
+}
+
+export function assertStorageConfigured() {
+  if (isVercel && !useBlob) {
+    throw new Error(
+      "BLOB_MISSING: Add Vercel Blob storage to this project (Storage → Create Blob → Connect)."
+    );
+  }
 }
 
 export async function storeDocumentFile(
@@ -16,6 +25,8 @@ export async function storeDocumentFile(
   buffer: Buffer,
   mimeType: string
 ): Promise<{ storageKey: string; fileUrl: string }> {
+  assertStorageConfigured();
+
   const storageKey = buildStorageKey(userId, documentId, fileName);
 
   if (useBlob) {

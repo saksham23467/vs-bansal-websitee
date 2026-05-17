@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { UserRole } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -6,7 +7,7 @@ import {
   MAX_DOCUMENT_BYTES,
   resolveMimeType,
 } from "@/lib/documents";
-import { storeDocumentFile } from "@/lib/document-storage";
+import { assertStorageConfigured, storeDocumentFile } from "@/lib/document-storage";
 
 export const runtime = "nodejs";
 
@@ -117,7 +118,24 @@ export async function POST(req: Request) {
   const buffer = Buffer.from(await file.arrayBuffer());
   const fileName = file.name || "document";
 
-  const document = await prisma.document.create({
+  try {
+    assertStorageConfigured();
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "";
+    return NextResponse.json(
+      {
+        error:
+          msg.includes("BLOB_MISSING")
+            ? "File storage not set up on Vercel. Go to your Vercel project → Storage → Create Blob Store → Connect to project, then redeploy."
+            : "Storage not configured.",
+      },
+      { status: 503 }
+    );
+  }
+
+  let document;
+  try {
+    document = await prisma.document.create({
     data: {
       title: title.trim(),
       fileName,
@@ -128,7 +146,32 @@ export async function POST(req: Request) {
       category: typeof category === "string" && category ? category : null,
       userId: targetUserId,
     },
-  });
+    });
+  } catch (error) {
+    console.error("Document DB create error:", error);
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2021") {
+      return NextResponse.json(
+        {
+          error:
+            "Document table not ready. In Neon SQL Editor, run prisma/document-migration.sql then try again.",
+        },
+        { status: 503 }
+      );
+    }
+    if (error instanceof Prisma.PrismaClientInitializationError) {
+      return NextResponse.json(
+        {
+          error:
+            "Database not connected. Add DATABASE_URL in Vercel → Settings → Environment Variables (Neon pooled URL), then redeploy.",
+        },
+        { status: 503 }
+      );
+    }
+    return NextResponse.json(
+      { error: "Could not save document. Check database setup." },
+      { status: 503 }
+    );
+  }
 
   try {
     const stored = await storeDocumentFile(
@@ -152,9 +195,11 @@ export async function POST(req: Request) {
     await prisma.document.delete({ where: { id: document.id } }).catch(() => {});
     console.error("Document upload error:", error);
     const message =
-      error instanceof Error && error.message.includes("BLOB")
-        ? "File storage not configured. Add Vercel Blob on production."
-        : "Upload failed. Check database connection and try again.";
+      error instanceof Error && error.message.includes("BLOB_MISSING")
+        ? "Add Vercel Blob: Project → Storage → Create Blob → Connect → Redeploy."
+        : error instanceof Error
+          ? `Upload failed: ${error.message}`
+          : "Upload failed.";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
