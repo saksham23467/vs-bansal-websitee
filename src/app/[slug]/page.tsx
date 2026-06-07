@@ -170,10 +170,12 @@ export default async function ProgrammaticSeoPage({ params }: Props) {
                   </Accordion>
                 </FadeIn>
 
-                {page.city && page.city.slug !== "delhi" && (
+                {(page.city?.slug === "delhi" ||
+                  page.type === "keyword-landing" ||
+                  slug === "chartered-accountant-delhi") && (
                   <FadeIn>
                     <h2 className="text-2xl font-bold text-navy-900 dark:text-white">
-                      Google Maps — Head office (Delhi)
+                      Visit our office — CA near me (Pitampura, Delhi)
                     </h2>
                     <p className="mt-2 text-sm text-navy-600 dark:text-navy-300">
                       Pan-India clients welcome. Primary office at Pitampura for in-person meetings.

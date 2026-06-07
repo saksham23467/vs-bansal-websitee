@@ -1,7 +1,12 @@
 import { cities, type City } from "@/lib/cities";
+import { keywordLandingPages } from "@/lib/keyword-seo-pages";
 import { siteConfig } from "@/lib/site-config";
 
-export type SeoPageType = "chartered-accountant" | "service-city" | "guide";
+export type SeoPageType =
+  | "chartered-accountant"
+  | "service-city"
+  | "guide"
+  | "keyword-landing";
 
 export type ServiceSeoTemplate = {
   slugPrefix: string;
@@ -84,18 +89,34 @@ function buildCaPage(city: City): SeoPage {
     slug: `chartered-accountant-${city.slug}`,
     type: "chartered-accountant",
     city,
-    title: `Chartered Accountant in ${city.name}`,
-    metaTitle: `Chartered Accountant in ${city.name} | ${siteConfig.shortName}`,
-    metaDescription: `Looking for a chartered accountant in ${city.name}? ${siteConfig.name} offers GST, income tax, ROC, company registration & Virtual CFO. ${isHQ ? "Head office in Pitampura, Delhi." : "Pan-India service with Delhi HQ."} Book a free consultation.`,
-    h1: `Chartered Accountant in ${city.name}`,
-    intro: `${siteConfig.name} is a trusted ICAI-registered CA firm serving businesses in ${city.name} and ${city.nearbyAreas.slice(0, 3).join(", ")}. Led by ${siteConfig.partners.map((p) => p.name).join(" and ")}, we deliver GST filing, tax planning, ROC compliance, audits, and startup advisory with partner-led attention.`,
-    keywords: [
-      `chartered accountant ${city.name}`,
-      `CA in ${city.name}`,
-      `CA firm ${city.name}`,
-      `chartered accountant near me ${city.name}`,
-      ...siteConfig.keywords.slice(0, 4),
-    ],
+    title: isHQ ? "Best CA in Delhi" : `Chartered Accountant in ${city.name}`,
+    metaTitle: isHQ
+      ? `Best CA in Delhi | Chartered Accountant Pitampura NCR | ${siteConfig.shortName}`
+      : `Chartered Accountant in ${city.name} | ${siteConfig.shortName}`,
+    metaDescription: isHQ
+      ? `Best chartered accountant in Delhi & NCR. ${siteConfig.name} — Pitampura (NSP). GST, ITR, ROC, audit. CA near me friendly office. Book free consultation.`
+      : `Looking for a chartered accountant in ${city.name}? ${siteConfig.name} offers GST, income tax, ROC, company registration & Virtual CFO. Pan-India service with Delhi HQ. Book a free consultation.`,
+    h1: isHQ ? "Best Chartered Accountant in Delhi" : `Chartered Accountant in ${city.name}`,
+    intro: isHQ
+      ? `${siteConfig.name} is a leading ICAI-registered CA firm in Delhi, headquartered at Netaji Subhash Place, Pitampura. Searching for the best CA in Delhi or a chartered accountant near me? ${siteConfig.partners.map((p) => p.name).join(" and ")} deliver GST, income tax, ROC, audits, and Virtual CFO services across Delhi NCR and India.`
+      : `${siteConfig.name} is a trusted ICAI-registered CA firm serving businesses in ${city.name} and ${city.nearbyAreas.slice(0, 3).join(", ")}. Led by ${siteConfig.partners.map((p) => p.name).join(" and ")}, we deliver GST filing, tax planning, ROC compliance, audits, and startup advisory with partner-led attention.`,
+    keywords: isHQ
+      ? [
+          "best CA in Delhi",
+          "best chartered accountant in Delhi",
+          "CA near me",
+          "chartered accountant Delhi",
+          "CA Pitampura",
+          "GST consultant Delhi",
+          ...siteConfig.keywords.slice(0, 4),
+        ]
+      : [
+          `chartered accountant ${city.name}`,
+          `CA in ${city.name}`,
+          `CA firm ${city.name}`,
+          `chartered accountant near me ${city.name}`,
+          ...siteConfig.keywords.slice(0, 4),
+        ],
     faqs: [
       {
         question: `Do you have a physical office in ${city.name}?`,
@@ -248,7 +269,7 @@ export function getAllSeoPages(): SeoPage[] {
   const servicePages = cities.flatMap((city) =>
     serviceSeoTemplates.map((s) => buildServiceCityPage(city, s))
   );
-  return [...caPages, ...servicePages, ...guidePages];
+  return [...keywordLandingPages, ...caPages, ...servicePages, ...guidePages];
 }
 
 export function getSeoPageBySlug(slug: string): SeoPage | undefined {

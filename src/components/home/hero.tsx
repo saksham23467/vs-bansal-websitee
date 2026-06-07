@@ -30,8 +30,9 @@ export function Hero() {
               </span>
             </h1>
             <p className="mt-6 max-w-xl text-lg text-navy-700 dark:text-slate-300">
-              ICAI-registered firm in Pitampura, Delhi—led by {siteConfig.partners[0].name} and{" "}
-              {siteConfig.partners[1].name}. GST, income tax, ROC, company registration, audit & Virtual CFO across India.
+              Among Delhi&apos;s trusted CA firms for &ldquo;best CA in Delhi&rdquo;, &ldquo;CA near me&rdquo;, and
+              pan-India compliance—led by {siteConfig.partners[0].name} and {siteConfig.partners[1].name} from
+              Pitampura (NSP). GST, income tax, ROC, company registration, audit & Virtual CFO.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Button size="lg" asChild>
