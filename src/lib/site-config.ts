@@ -6,10 +6,10 @@ export const siteConfig = {
   description:
     "Looking for the best CA in Delhi or a chartered accountant near me? V S bansal & associates is an ICAI-registered firm in Pitampura (NSP) led by CA Sumit Bansal and CA Vineeta Bansal—GST, income tax, ROC, audit & Virtual CFO across India.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://vsbansalassociates.com",
-  phone: "+91 98105 58120",
-  phoneDisplay: "+91 98105 58120",
+  phone: "+91 93546 32052",
+  phoneDisplay: "+91 93546 32052",
   /** Digits only for wa.me links (no + or spaces) */
-  whatsapp: "919810558120",
+  whatsapp: "919354632052",
   email: "vsbansalassociates@gmail.com",
   address: {
     line1: "706, PP Trade Centre",

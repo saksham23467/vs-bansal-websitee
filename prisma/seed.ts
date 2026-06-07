@@ -41,7 +41,7 @@ async function main() {
     data: {
       name: "Demo Lead",
       email: "prospect@example.com",
-      phone: "+91 98105 58120",
+      phone: "+91 93546 32052",
       service: "GST Filing & Compliance",
       message: "Interested in monthly GST and bookkeeping support for a 40-person team.",
       source: "seed",
