@@ -130,12 +130,15 @@ export function Footer() {
               Contact
             </h4>
             <ul className="space-y-3 text-sm">
-              <li className="flex gap-3">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-royal-400" />
-                <span>
-                  {siteConfig.address.line1}, {siteConfig.address.line2}
-                </span>
-              </li>
+              {siteConfig.offices.map((office) => (
+                <li key={office.region} className="flex gap-3">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-royal-400" />
+                  <span>
+                    <span className="font-medium text-white">{office.region}:</span>{" "}
+                    {office.line1}, {office.line2}, {office.city} {office.postalCode}
+                  </span>
+                </li>
+              ))}
               <li className="flex gap-3">
                 <Phone className="h-4 w-4 shrink-0 text-royal-400" />
                 <a href={getTelHref()} className="hover:text-royal-400">

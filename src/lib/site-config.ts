@@ -20,6 +20,38 @@ export const siteConfig = {
     country: "India",
     full: "706, PP Trade Centre, Netaji Subhash Place, Pitampura, Delhi 110034",
   },
+  offices: [
+    {
+      label: "Head Office",
+      region: "Delhi NCR",
+      line1: "706, PP Trade Centre",
+      line2: "Netaji Subhash Place, Pitampura",
+      city: "Delhi",
+      state: "Delhi",
+      postalCode: "110034",
+      country: "India",
+      full: "706, PP Trade Centre, Netaji Subhash Place, Pitampura, Delhi 110034",
+      mapsEmbed:
+        "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3499.8409777787624!2d77.14612087571109!3d28.69440318126793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d03eec1aabacb%3A0xe1a8cbd28baf3ee8!2sPP%20Trade%20Center%2C%20Netaji%20Subhash%20Place!5e0!3m2!1sen!2sin!4v1779032234061!5m2!1sen!2sin",
+      mapsUrl:
+        "https://www.google.com/maps/place/PP+Trade+Center,+Netaji+Subhash+Place/@28.6944032,77.1461209,17z",
+    },
+    {
+      label: "Branch Office",
+      region: "Punjab",
+      line1: "Flat No. 23, GF, Simran Apartment",
+      line2: "Ekta Vihar, Baltana",
+      city: "Baltana",
+      state: "Punjab",
+      postalCode: "140604",
+      country: "India",
+      full: "Flat No. 23, GF, Simran Apartment, Ekta Vihar, Baltana, Punjab 140604",
+      mapsEmbed:
+        "https://www.google.com/maps?q=Simran+Apartment,+Ekta+Vihar,+Baltana,+Punjab+140604&output=embed",
+      mapsUrl:
+        "https://www.google.com/maps/search/?api=1&query=Simran+Apartment+Ekta+Vihar+Baltana+Punjab+140604",
+    },
+  ],
   geo: {
     latitude: 28.6944,
     longitude: 77.1487,
@@ -84,6 +116,10 @@ export const siteConfig = {
   ],
   serviceAreas: [
     "Delhi",
+    "Delhi NCR",
+    "Punjab",
+    "Zirakpur",
+    "Chandigarh",
     "Noida",
     "Gurgaon",
     "Mumbai",
