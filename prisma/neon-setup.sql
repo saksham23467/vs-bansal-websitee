@@ -286,3 +286,61 @@ ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY
 -- AddForeignKey
 ALTER TABLE "Message" ADD CONSTRAINT "Message_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
+-- Careers module (Job, JobApplication). For an existing DB run prisma/careers-migration.sql instead.
+CREATE TYPE "JobType" AS ENUM ('INTERNSHIP', 'ARTICLESHIP', 'FULL_TIME', 'PART_TIME', 'CONTRACT');
+CREATE TYPE "JobStatus" AS ENUM ('OPEN', 'CLOSED', 'DRAFT');
+CREATE TYPE "ApplicationStatus" AS ENUM ('NEW', 'REVIEWING', 'SHORTLISTED', 'REJECTED', 'HIRED');
+
+CREATE TABLE "Job" (
+    "id" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "location" TEXT NOT NULL DEFAULT 'Delhi NCR',
+    "type" "JobType" NOT NULL DEFAULT 'FULL_TIME',
+    "duration" TEXT,
+    "experience" TEXT,
+    "compensation" TEXT,
+    "overview" TEXT NOT NULL,
+    "responsibilities" TEXT[],
+    "requirements" TEXT[],
+    "preferred" TEXT[],
+    "benefits" TEXT[],
+    "exposureAreas" TEXT[],
+    "status" "JobStatus" NOT NULL DEFAULT 'OPEN',
+    "order" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Job_pkey" PRIMARY KEY ("id")
+);
+
+CREATE UNIQUE INDEX "Job_slug_key" ON "Job"("slug");
+CREATE INDEX "Job_status_idx" ON "Job"("status");
+
+CREATE TABLE "JobApplication" (
+    "id" TEXT NOT NULL,
+    "jobId" TEXT,
+    "positionTitle" TEXT NOT NULL,
+    "fullName" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "phone" TEXT NOT NULL,
+    "location" TEXT NOT NULL,
+    "qualification" TEXT NOT NULL,
+    "experience" TEXT,
+    "resumeUrl" TEXT NOT NULL,
+    "resumeKey" TEXT NOT NULL,
+    "resumeName" TEXT NOT NULL,
+    "linkedin" TEXT,
+    "coverLetter" TEXT,
+    "status" "ApplicationStatus" NOT NULL DEFAULT 'NEW',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "JobApplication_pkey" PRIMARY KEY ("id")
+);
+
+CREATE INDEX "JobApplication_jobId_idx" ON "JobApplication"("jobId");
+CREATE INDEX "JobApplication_status_idx" ON "JobApplication"("status");
+
+ALTER TABLE "JobApplication" ADD CONSTRAINT "JobApplication_jobId_fkey" FOREIGN KEY ("jobId") REFERENCES "Job"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+

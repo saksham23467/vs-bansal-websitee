@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FileText, UserPlus, Users } from "lucide-react";
+import { Briefcase, FileText, UserPlus, Users } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { UserRole } from "@prisma/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -84,6 +84,22 @@ export default async function PortalAdminOverviewPage() {
             <p className="text-sm text-navy-600">Upload files for any client account.</p>
             <Button asChild>
               <Link href="/portal/admin/documents">Client documents</Link>
+            </Button>
+          </CardContent>
+        </Card>
+        <Card className="border-royal-200 bg-royal-50/50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Briefcase className="h-5 w-5 text-royal-600" />
+              Careers
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <p className="text-sm text-navy-600">
+              Manage job postings. Applications are emailed to you directly.
+            </p>
+            <Button asChild>
+              <Link href="/portal/admin/careers">Manage careers</Link>
             </Button>
           </CardContent>
         </Card>

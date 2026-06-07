@@ -46,6 +46,28 @@ enum DocumentOwnerScope {
   ADMIN
 }
 
+enum JobType {
+  INTERNSHIP
+  ARTICLESHIP
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+}
+
+enum JobStatus {
+  OPEN
+  CLOSED
+  DRAFT
+}
+
+enum ApplicationStatus {
+  NEW
+  REVIEWING
+  SHORTLISTED
+  REJECTED
+  HIRED
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -247,4 +269,53 @@ model BlogPost {
   publishedAt DateTime @default(now())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Job {
+  id               String           @id @default(cuid())
+  slug             String           @unique
+  title            String
+  location         String           @default("Delhi NCR")
+  type             JobType          @default(FULL_TIME)
+  duration         String?
+  experience       String?
+  compensation     String?
+  overview         String           @db.Text
+  responsibilities String[]
+  requirements     String[]
+  preferred        String[]
+  benefits         String[]
+  exposureAreas    String[]
+  status           JobStatus        @default(OPEN)
+  order            Int              @default(0)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  applications     JobApplication[]
+
+  @@index([status])
+}
+
+model JobApplication {
+  id            String            @id @default(cuid())
+  jobId         String?
+  job           Job?              @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  positionTitle String
+  fullName      String
+  email         String
+  phone         String
+  location      String
+  qualification String
+  experience    String?
+  resumeUrl     String
+  resumeKey     String
+  resumeName    String
+  linkedin      String?
+  coverLetter   String?           @db.Text
+  status        ApplicationStatus @default(NEW)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([jobId])
+  @@index([status])
 }

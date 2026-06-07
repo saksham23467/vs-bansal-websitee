@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {
+  Briefcase,
   FileText,
   LayoutDashboard,
   LogOut,
@@ -26,6 +27,7 @@ const adminNav = [
   { href: "/portal/admin", label: "Overview", icon: Shield, exact: true },
   { href: "/portal/admin/clients", label: "Clients", icon: UserPlus },
   { href: "/portal/admin/documents", label: "Documents", icon: FileText },
+  { href: "/portal/admin/careers", label: "Careers", icon: Briefcase },
 ];
 
 export function PortalShell({

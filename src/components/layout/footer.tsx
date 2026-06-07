@@ -43,14 +43,17 @@ const footerLinks = {
     { href: "/expertise", label: "Our Partners" },
     { href: "/locations", label: "Locations" },
     { href: "/blog", label: "Blog & Updates" },
+    { href: "/careers", label: "Careers" },
     { href: "/contact", label: "Contact" },
     { href: "/portal/login", label: "Client Portal" },
   ],
   resources: [
+    { href: "/best-ca-in-delhi", label: "Best CA in Delhi" },
+    { href: "/best-chartered-accountant-india", label: "Best CA in India" },
+    { href: "/chartered-accountant-near-me", label: "CA near me" },
     { href: "/chartered-accountant-delhi", label: "CA in Delhi" },
     { href: "/gst-consultant-noida", label: "GST Consultant Noida" },
     { href: "/guides", label: "Tax Guides" },
-    { href: "/blog/category/gst", label: "GST Articles" },
   ],
 };
 

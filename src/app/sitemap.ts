@@ -18,6 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/expertise",
     "/locations",
     "/guides",
+    "/careers",
     "/portal/login",
   ].map((path) => ({
     url: `${base}${path}`,
@@ -33,11 +34,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.9,
   }));
 
+  const keywordSlugs = new Set([
+    "best-ca-in-delhi",
+    "best-chartered-accountant-india",
+    "chartered-accountant-near-me",
+  ]);
+
   const seoRoutes: MetadataRoute.Sitemap = getAllSeoSlugs().map((slug) => ({
     url: `${base}/${slug}`,
     lastModified: now,
     changeFrequency: "weekly",
-    priority: slug.startsWith("chartered-accountant") ? 0.95 : 0.8,
+    priority: keywordSlugs.has(slug)
+      ? 0.99
+      : slug.startsWith("chartered-accountant-delhi")
+        ? 0.98
+        : slug.startsWith("chartered-accountant")
+          ? 0.95
+          : 0.8,
   }));
 
   const blogRoutes: MetadataRoute.Sitemap = getAllPostSlugs().map((slug) => ({

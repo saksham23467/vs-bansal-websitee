@@ -102,14 +102,25 @@ export function organizationJsonLd() {
 export function localBusinessJsonLd() {
   return {
     "@context": "https://schema.org",
-    "@type": "AccountingService",
+    "@type": ["AccountingService", "ProfessionalService", "LocalBusiness"],
     "@id": `${siteConfig.url}/#localbusiness`,
     name: siteConfig.name,
-    image: `${siteConfig.url}/api/og`,
+    image: `${siteConfig.url}/ca-india-logo.png`,
     url: siteConfig.url,
     telephone: siteConfig.phone,
     email: siteConfig.email,
     priceRange: "₹₹",
+    hasMap: siteConfig.googleMapsUrl,
+    slogan: siteConfig.tagline,
+    knowsAbout: [
+      "GST filing",
+      "Income tax return",
+      "ROC compliance",
+      "Company registration",
+      "Chartered accountancy",
+      "Virtual CFO",
+      "Tax planning India",
+    ],
     address: postalAddress(),
     geo: {
       "@type": "GeoCoordinates",
@@ -234,6 +245,69 @@ export function faqJsonLd(faqs: { question: string; answer: string }[]) {
       name: faq.question,
       acceptedAnswer: { "@type": "Answer", text: faq.answer },
     })),
+  };
+}
+
+const EMPLOYMENT_TYPE_MAP: Record<string, string> = {
+  INTERNSHIP: "INTERN",
+  ARTICLESHIP: "INTERN",
+  FULL_TIME: "FULL_TIME",
+  PART_TIME: "PART_TIME",
+  CONTRACT: "CONTRACTOR",
+};
+
+export function jobPostingJsonLd(job: {
+  title: string;
+  slug: string;
+  type: string;
+  location: string;
+  overview: string;
+  responsibilities: string[];
+  requirements: string[];
+  datePosted: string;
+}) {
+  const descriptionParts = [
+    `<p>${job.overview}</p>`,
+    job.responsibilities.length
+      ? `<p><strong>Responsibilities:</strong></p><ul>${job.responsibilities
+          .map((r) => `<li>${r}</li>`)
+          .join("")}</ul>`
+      : "",
+    job.requirements.length
+      ? `<p><strong>Requirements:</strong></p><ul>${job.requirements
+          .map((r) => `<li>${r}</li>`)
+          .join("")}</ul>`
+      : "",
+  ];
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title: job.title,
+    description: descriptionParts.join(""),
+    datePosted: job.datePosted,
+    employmentType: EMPLOYMENT_TYPE_MAP[job.type] ?? "OTHER",
+    url: `${siteConfig.url}/careers#${job.slug}`,
+    directApply: true,
+    hiringOrganization: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      sameAs: siteConfig.url,
+      logo: `${siteConfig.url}/ca-india-logo.png`,
+    },
+    jobLocation: {
+      "@type": "Place",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: job.location,
+        addressRegion: "Delhi",
+        addressCountry: "IN",
+      },
+    },
+    applicantLocationRequirements: {
+      "@type": "Country",
+      name: "India",
+    },
   };
 }
 

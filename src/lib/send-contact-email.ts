@@ -5,16 +5,24 @@ import { siteConfig } from "@/lib/site-config";
 const NOTIFY_EMAIL =
   process.env.CONTACT_NOTIFY_EMAIL?.trim() || siteConfig.email;
 
+export type EmailAttachment = {
+  filename: string;
+  content: Buffer;
+  contentType?: string;
+};
+
 export type ContactEmailPayload = {
   name: string;
   email: string;
   phone?: string | null;
   service?: string | null;
   message: string;
+  subject?: string;
+  attachments?: EmailAttachment[];
 };
 
 function buildEmailContent(data: ContactEmailPayload) {
-  const subject = `New website enquiry: ${data.name}`;
+  const subject = data.subject ?? `New website enquiry: ${data.name}`;
   const text = [
     "New message from the V S bansal & associates website contact form.",
     "",
@@ -44,6 +52,10 @@ async function sendViaResend(data: ContactEmailPayload) {
     replyTo: data.email,
     subject,
     text,
+    attachments: data.attachments?.map((a) => ({
+      filename: a.filename,
+      content: a.content,
+    })),
   });
   return true;
 }
@@ -69,6 +81,11 @@ async function sendViaSmtp(data: ContactEmailPayload) {
     replyTo: data.email,
     subject,
     text,
+    attachments: data.attachments?.map((a) => ({
+      filename: a.filename,
+      content: a.content,
+      contentType: a.contentType,
+    })),
   });
   return true;
 }
