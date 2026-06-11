@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/footer";
 import { FloatingCta } from "@/components/layout/floating-cta";
 import { Providers } from "@/components/providers";
 import { Analytics } from "@/components/analytics";
+import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
 import { JsonLd } from "@/components/seo/json-ld";
 import {
   buildMetadata,
@@ -55,6 +56,7 @@ export default function RootLayout({
           <Footer />
           <FloatingCta />
         </Providers>
+        <VercelAnalytics />
       </body>
     </html>
   );
