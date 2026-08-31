@@ -17,7 +17,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https:",
       "font-src 'self' data:",
-      "connect-src 'self' https://www.google-analytics.com https://www.clarity.ms https://va.vercel-scripts.com",
+      "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.clarity.ms https://va.vercel-scripts.com",
       "frame-src 'self' https://www.google.com https://calendly.com",
     ].join("; "),
   },
